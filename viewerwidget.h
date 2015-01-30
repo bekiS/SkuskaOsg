@@ -19,7 +19,7 @@ signals:
 public slots:
 
 protected:
-    virtual void paintEvent( QPaintEvent* event )
+    virtual void paintEvent( QPaintEvent* /*event*/ )
     { _viewer.frame(); }
 
     osgViewer::Viewer _viewer;

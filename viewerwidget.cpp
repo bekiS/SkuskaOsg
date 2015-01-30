@@ -12,11 +12,11 @@ class SetShapeColorHandler : public osgCookBook::PickHandler
 {
     virtual void doUserOperations( osgUtil::LineSegmentIntersector::Intersection& result )
     {
-//        osg::ShapeDrawable* shape = dynamic_cast<osg::ShapeDrawable*>( result.drawable.get() );
-//        if ( shape ) shape->setColor( osg::Vec4(1.0f, 1.0f, 1.0f, 2.0f) - shape->getColor() );
-
         osg::ShapeDrawable* shape = dynamic_cast<osg::ShapeDrawable*>( result.drawable.get() );
-        if ( shape ) shape->changeColor(osg::Vec3(0.3f, 0.5f, 0.6f));
+        if ( shape ) shape->setColor( osg::Vec4(1.0f, 1.0f, 1.0f, 2.0f) - shape->getColor() );
+
+//      osg::ShapeDrawable* shape = dynamic_cast<osg::ShapeDrawable*>( result.drawable.get() );
+//      if ( shape ) shape->setColor(osg::Vec4(1.0f, 0.3f, 0.5f, 0.6f));
     }
 };
 
