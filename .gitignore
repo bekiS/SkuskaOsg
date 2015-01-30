@@ -25,6 +25,7 @@ ui_*
 object_*
 
 # Binaries
+osgZknihy
 *.exe
 *_test
 *.qm
