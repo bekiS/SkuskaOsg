@@ -8,7 +8,8 @@ class stageGeode
 {
 public:
     stageGeode();
-    osg::ref_ptr<osg::Geode> get(){return _stageGeode;}
+    osg::ref_ptr<osg::Geode> get() {return _stageGeode;}
+    float getWidth() {return _width;}
 
 private:
     osg::ref_ptr<osg::Geode> _stageGeode;

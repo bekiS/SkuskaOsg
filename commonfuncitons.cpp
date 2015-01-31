@@ -3,6 +3,7 @@
 #include <osg/PolygonMode>
 #include <osgText/Font>
 #include <osgViewer/View>
+#include <osg/ShapeDrawable>
 
 namespace osgCookBook
 {
@@ -132,7 +133,9 @@ namespace osgCookBook
             if ( intersector->containsIntersections() )
             {
                 osgUtil::LineSegmentIntersector::Intersection result = *(intersector->getIntersections().begin());
-                doUserOperations( result );
+                //doUserOperations( result );
+                 osg::ShapeDrawable* shape = dynamic_cast<osg::ShapeDrawable*>( result.drawable.get() );
+                 if(true);
             }
         }
         return false;

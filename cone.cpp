@@ -11,12 +11,12 @@ Cone::Cone()
     pyramidGeometry->setUseDisplayList( false );
 
     osg::ref_ptr<osg::Vec3Array> pyramidVertices = new osg::Vec3Array();
-    pyramidVertices->push_back( osg::Vec3(  0,  0, 6) ); // peak
+    pyramidVertices->push_back( osg::Vec3(  0,  0, 0) ); // peak
     int faces = 16;
     double partOfCircle = osg::PI * 2.0 / (double)faces ;
     double position = 0.0;
     for (int i = 0; i < faces; ++i){
-        pyramidVertices->push_back( osg::Vec3( sin(position), cos(position), 0) ); // points at base
+        pyramidVertices->push_back( osg::Vec3( sin(position), cos(position), -6) ); // points at base
         position += partOfCircle;
     }
     pyramidGeometry->setVertexArray( pyramidVertices );

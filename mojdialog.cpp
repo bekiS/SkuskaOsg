@@ -32,8 +32,8 @@ MojDialog::MojDialog(QWidget *parent) :
 
     //CloneObjectRoot root = CloneObjectRoot();
     //Auto root = Auto();
-    vizualSceny root = vizualSceny();
-    ViewerWidget* widget = new ViewerWidget(gw, root.get() /* scene */);
+    vizualSceny* root = new vizualSceny();
+    ViewerWidget* widget = new ViewerWidget(gw, root /* scene */);
     widget->setGeometry( 100, 100, 800, 600 );
     widget->show();
 

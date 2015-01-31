@@ -3,29 +3,34 @@
 #include <QVBoxLayout>
 
 #include <osgGA/TrackballManipulator>
-#include <osgViewer/ViewerEventHandlers>
 #include "commonfuncitons.h"
 #include <osg/ShapeDrawable>
-#include "cone.h"
+#include "commonfuncitons.h"
+#include <osg/ShapeDrawable>
+#include <osgViewer/ViewerEventHandlers>
 
 class SetShapeColorHandler : public osgCookBook::PickHandler
 {
+public:
+    SetShapeColorHandler( vizualSceny * scene ) : _scene( scene ) {}
+
     virtual void doUserOperations( osgUtil::LineSegmentIntersector::Intersection& result )
     {
-        osg::ShapeDrawable* shape = dynamic_cast<osg::ShapeDrawable*>( result.drawable.get() );
-        if ( shape ) shape->setColor( osg::Vec4(1.0f, 1.0f, 1.0f, 2.0f) - shape->getColor() );
-
-//      osg::ShapeDrawable* shape = dynamic_cast<osg::ShapeDrawable*>( result.drawable.get() );
-//      if ( shape ) shape->setColor(osg::Vec4(1.0f, 0.3f, 0.5f, 0.6f));
+        osg::Drawable* shape = dynamic_cast<osg::Drawable*>( result.drawable.get() );
+        if ( shape )
+            _scene->doUserOperation(shape);
     }
+
+private:
+    vizualSceny *_scene;
 };
 
 
-ViewerWidget::ViewerWidget( osgQt::GraphicsWindowQt* gw, osg::Node* scene )
+ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw, vizualSceny* scene )
     : QWidget()
+    , _scene(scene)
 {
     const osg::GraphicsContext::Traits* traits = gw->getTraits();
-
     osg::Camera* camera = _viewer.getCamera();
     camera->setGraphicsContext( gw );
     camera->setClearColor( osg::Vec4(0.2, 0.2, 0.6, 1.0) );
@@ -33,9 +38,9 @@ ViewerWidget::ViewerWidget( osgQt::GraphicsWindowQt* gw, osg::Node* scene )
     camera->setProjectionMatrixAsPerspective(
         30.0f, static_cast<double>(traits->width)/static_cast<double>(traits->height), 1.0f, 10000.0f );
 
-    _viewer.setSceneData( scene );
+    _viewer.setSceneData( scene->get() );
     _viewer.addEventHandler( new osgViewer::StatsHandler );
-    _viewer.addEventHandler( new SetShapeColorHandler );
+    _viewer.addEventHandler( new SetShapeColorHandler( _scene ) );
     _viewer.setCameraManipulator( new osgGA::TrackballManipulator );
     _viewer.setThreadingModel( osgViewer::Viewer::SingleThreaded );
 

@@ -2,7 +2,7 @@
 
 floorGeode::floorGeode()
 {
-    _radius = 100.0f;
+    _radius = 20.0f;
     _floorGeode = new osg::Geode();
 
     osg::ref_ptr<osg::Geometry> floorGeometry = new osg::Geometry();
