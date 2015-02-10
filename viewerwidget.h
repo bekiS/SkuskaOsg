@@ -6,14 +6,14 @@
 #include <osg/Geode>
 #include <osgViewer/Viewer>
 #include <osgQt/GraphicsWindowQt>
-#include <vizualsceny.h>
+#include "vizualsceny2.h"
 
 class ViewerWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ViewerWidget( osgQt::GraphicsWindowQt* gw, vizualSceny* scene );
-    vizualSceny *_scene;
+    ViewerWidget( osgQt::GraphicsWindowQt* gw, VizualSceny2* scene );
+    VizualSceny2 *_scene;
 signals:
 
 public slots:

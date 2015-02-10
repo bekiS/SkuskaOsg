@@ -21,7 +21,9 @@ SOURCES += main.cpp \
     mojdialog.cpp \
     cone.cpp \
     floorgeode.cpp \
-    stagegeode.cpp
+    stagegeode.cpp \
+    fixture2.cpp \
+    vizualsceny2.cpp
 
 HEADERS  += \
     viewerwidget.h \
@@ -32,11 +34,13 @@ HEADERS  += \
     mojdialog.h \
     cone.h \
     floorgeode.h \
-    stagegeode.h
+    stagegeode.h \
+    fixture2.h \
+    vizualsceny2.h
 
 FORMS    += \
     mojdialog.ui
 
 INCLUDEPATH += . /usr/include
 
-LIBS += -Lusr/lib -losg -losgViewer -lOpenThreads -losgUtil -losgDB -losgGA -losgQt
+LIBS += -Lusr/lib -losg -losgViewer -lOpenThreads -losgUtil -losgDB -losgGA -losgQt -losgManipulator

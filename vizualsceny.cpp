@@ -1,6 +1,8 @@
 #include "vizualsceny.h"
 #include "floorgeode.h"
 #include "stagegeode.h"
+#include "osgDB/ReadFile"
+#include "commonfuncitons.h"
 
 vizualSceny::vizualSceny()
 {
@@ -17,9 +19,12 @@ vizualSceny::vizualSceny()
     _root->addChild( floor.get() );
 
     stageGeode stage = stageGeode();
-    _root->addChild( stage.get() );
+    osg::Node* scene = osgDB::readNodeFile("/home/beki/par.osgt");
 
-    int numberOfFixtures = 15;
+    _root->addChild( scene );
+
+
+    int numberOfFixtures = 5;
     float space = stage.getWidth() / (float)(numberOfFixtures + 1);
     float posX = stage.getWidth() * -0.5f;
     for( int i = 0; i < numberOfFixtures; ++i){
@@ -29,7 +34,9 @@ vizualSceny::vizualSceny()
         osg::ref_ptr<osg::MatrixTransform> trans = new osg::MatrixTransform;
         posX += space;
         trans->setMatrix( osg::Matrix::rotate(osg::PI / 4, osg::Vec3d(-1, 0,  0)) * osg::Matrix::translate( osg::Vec3(posX, 8.0f, 7.0f)) );
-        trans->addChild( _cone.last().getGeode() );
+//        trans->addChild( _cone.last().getGeode() );
+//        _root->addChild( osgCookBook::addDraggerToScene(trans) );
+        trans->addChild( osgCookBook::addDraggerToScene( _cone.last().getGeode() ) );
         _root->addChild( trans );
         _cone.last().changeColor(osg::Vec3((float)(i+ 1)/(float)numberOfFixtures, 1.0f, 0.0f));
         _cone.last().changeOpacity(0.6f);
@@ -44,7 +51,7 @@ void vizualSceny::doUserOperation( osg::Drawable *shape)
     {
         if( shape == i->getGeode()->getDrawable(0) )
         {
-            i->changeColor(osg::Vec3( 1.0f, 1.0f, 0.0f ) );
+            i->changeColor(osg::Vec3( 0.0f, 0.0f, 1.0f ) );
         }
     }
 }

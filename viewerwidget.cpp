@@ -5,14 +5,12 @@
 #include <osgGA/TrackballManipulator>
 #include "commonfuncitons.h"
 #include <osg/ShapeDrawable>
-#include "commonfuncitons.h"
-#include <osg/ShapeDrawable>
 #include <osgViewer/ViewerEventHandlers>
 
 class SetShapeColorHandler : public osgCookBook::PickHandler
 {
 public:
-    SetShapeColorHandler( vizualSceny * scene ) : _scene( scene ) {}
+    SetShapeColorHandler( VizualSceny2 * scene ) : _scene( scene ) {}
 
     virtual void doUserOperations( osgUtil::LineSegmentIntersector::Intersection& result )
     {
@@ -22,11 +20,11 @@ public:
     }
 
 private:
-    vizualSceny *_scene;
+    VizualSceny2 *_scene;
 };
 
 
-ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw, vizualSceny* scene )
+ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw, VizualSceny2 *scene )
     : QWidget()
     , _scene(scene)
 {
@@ -36,7 +34,7 @@ ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw, vizualSceny* scene )
     camera->setClearColor( osg::Vec4(0.2, 0.2, 0.6, 1.0) );
     camera->setViewport( new osg::Viewport(0, 0, traits->width, traits->height) );
     camera->setProjectionMatrixAsPerspective(
-        30.0f, static_cast<double>(traits->width)/static_cast<double>(traits->height), 1.0f, 10000.0f );
+        30.0f, static_cast<double>(traits->width)/static_cast<double>(traits->height), 1.0f, 1000.0f );
 
     _viewer.setSceneData( scene->get() );
     _viewer.addEventHandler( new osgViewer::StatsHandler );

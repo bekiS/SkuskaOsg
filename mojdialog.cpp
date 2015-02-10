@@ -7,7 +7,7 @@
 #include "viewerwidget.h"
 //#include "cloneobjectroot.h"
 //#include "auto.h"
-#include "vizualsceny.h"
+
 
 osgQt::GraphicsWindowQt* createGraphicsWindow( int x, int y, int w, int h )
 {
@@ -28,12 +28,12 @@ MojDialog::MojDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     osgQt::GraphicsWindowQt* gw = createGraphicsWindow( 50, 50, 640, 480 );
-    //osg::Node* scene = osgDB::readNodeFile("/home/beki/OpenSceneGraph-Data-3.0.0/cow.osg");
+//    osg::Node* scene = osgDB::readNodeFile("/home/beki/par.osgt");
 
     //CloneObjectRoot root = CloneObjectRoot();
     //Auto root = Auto();
-    vizualSceny* root = new vizualSceny();
-    ViewerWidget* widget = new ViewerWidget(gw, root /* scene */);
+    _root = new VizualSceny2();
+    ViewerWidget* widget = new ViewerWidget(gw, _root /* scene */);
     widget->setGeometry( 100, 100, 800, 600 );
     widget->show();
 
@@ -42,4 +42,9 @@ MojDialog::MojDialog(QWidget *parent) :
 MojDialog::~MojDialog()
 {
     delete ui;
+}
+
+void MojDialog::on_pushButton_clicked()
+{
+   _root->addFixtureChild();
 }
