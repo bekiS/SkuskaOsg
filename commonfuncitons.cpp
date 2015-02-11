@@ -142,7 +142,8 @@ namespace osgCookBook
     {
         if ( ea.getEventType()!=osgGA::GUIEventAdapter::RELEASE ||
              ea.getButton()!=osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON ||
-             !(ea.getModKeyMask()&osgGA::GUIEventAdapter::MODKEY_CTRL) )
+             !((ea.getModKeyMask()&osgGA::GUIEventAdapter::MODKEY_CTRL) ||
+             (ea.getModKeyMask()&osgGA::GUIEventAdapter::MODKEY_SHIFT)))
             return false;
 
         osgViewer::View* viewer = dynamic_cast<osgViewer::View*>(&aa);
@@ -157,7 +158,7 @@ namespace osgCookBook
             {
                 osgUtil::LineSegmentIntersector::Intersection result = *(intersector->getIntersections().begin());
 //                osg::ShapeDrawable* shape = dynamic_cast<osg::ShapeDrawable*>( result.drawable.get() );
-                doUserOperations( result );
+                doUserOperations( result, ea );
             }
         }
         return false;
@@ -184,23 +185,11 @@ namespace osgCookBook
         dragger->setMatrix(osg::Matrix::scale(3, 3, 3));
 //                         * osg::Matrix::translate(scene->   getBound().center()));
 
-//        if (dynamic_cast<osgManipulator::TabPlaneDragger*>(dragger))
-//        {
-//            dragger->addTransformUpdating(transform, osgManipulator::DraggerTransformCallback::HANDLE_TRANSLATE_IN_LINE);
-//        }
-//        else
-//        {
             dragger->addTransformUpdating(transform);
-//        }
 
         // we want the dragger to handle it's own events automatically
         dragger->setHandleEvents(true);
 
-        // if we don't set an activation key or mod mask then any mouse click on
-        // the dragger will activate it, however if do define either of ActivationModKeyMask or
-        // and ActivationKeyEvent then you'll have to press either than mod key or the specified key to
-        // be able to activate the dragger when you mouse click on it.  Please note the follow allows
-        // activation if either the ctrl key or the 'a' key is pressed and held down.
 //        dragger->setActivationModKeyMask(osgGA::GUIEventAdapter::MODKEY_CTRL);
         dragger->setActivationKeyEvent('g');
 

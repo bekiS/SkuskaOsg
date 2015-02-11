@@ -1,20 +1,22 @@
 #include "fixture2.h"
 #include <osgDB/ReadFile>
 #include <osg/BlendFunc>
+#include <osg/MatrixTransform>
+#include "commonfuncitons.h"
 
 Fixture2::Fixture2()
 {
     _fixture = new osg::Group();
 
     osg::ref_ptr<osg::Node> head = osgDB::readNodeFile("/home/beki/par.osgt");
-   _fixture->addChild(head);
+//   _fixture->addChild(head);
 
     _pyramidGeode = new osg::Geode();
     osg::ref_ptr<osg::Geometry> pyramidGeometry = new osg::Geometry();
     _pyramidGeode->addDrawable(pyramidGeometry);
     pyramidGeometry->setDataVariance( osg::Object::DYNAMIC );
     pyramidGeometry->setUseDisplayList( false );
-    _fixture->addChild(_pyramidGeode);
+//    _fixture->addChild(_pyramidGeode);
 
     osg::ref_ptr<osg::Vec3Array> pyramidVertices = new osg::Vec3Array();
     pyramidVertices->push_back( osg::Vec3(  0,  0, 0) ); // peak
@@ -56,6 +58,46 @@ Fixture2::Fixture2()
     blendFunc->setFunction( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     stateset->setAttributeAndModes( blendFunc );
 
+    _transG = new osg::MatrixTransform;
+    _transR = new osg::MatrixTransform;
+    _transQLC = new osg::MatrixTransform;
+    _transG->setMatrix(osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 7.0f) ) );
+    _transR->setMatrix( osg::Matrix::rotate( osg::PI / 4, osg::Vec3d(-1, 0,  0) ) );
+    _transQLC->addChild( head );
+    _transQLC->addChild( _pyramidGeode );
+//        trans->setMatrix( osg::Matrix::rotate(osg::PI / 4, osg::Vec3d(-1, 0,  0)) * osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 7.0f)) );
+    _transR->addChild( _transQLC );
+//    _transG->addChild( osgCookBook::addDraggerToScene( _transR ) );
+    _fixture->addChild( _transG );
+
+/// translation by user with mouse
+    _transR->getOrCreateStateSet()->setMode(GL_NORMALIZE, osg::StateAttribute::ON);
+    _transG->addChild( _transR );
+    _draggerG = new osgManipulator::TranslateAxisDragger();
+    _draggerG->setupDefaultGeometry();
+    _transG->addChild(_draggerG);
+    _draggerG->setMatrix(osg::Matrix::scale(3, 3, 3));
+    _draggerG->setHandleEvents(false);
+//    _draggerG->setActivationKeyEvent('g');
+    _draggerG->addTransformUpdating( _transR );
+    _draggerG->setNodeMask(0);
+
+/// rotation by user with mouse
+    _transQLC->getOrCreateStateSet()->setMode(GL_NORMALIZE, osg::StateAttribute::ON);
+    _transR->addChild( _transQLC );
+    _draggerR = new osgManipulator::TrackballDragger();
+    _draggerR->setupDefaultGeometry();
+    _transR->addChild(_draggerR);
+//    _draggerR->setMatrix(osg::Matrix::scale(3, 3, 3));
+    _draggerR->setHandleEvents(false);
+//    _draggerR->setActivationKeyEvent('r');
+    _draggerR->addTransformUpdating( _transQLC );
+    _draggerR->setNodeMask(0);
+
+
+
+
+
 }
 
 void Fixture2::changeColor(osg::Vec3 colorValue, bool overwrite)
@@ -88,3 +130,33 @@ void Fixture2::changeOpacity(float opacityValue, bool overwrite)
         color->w() += opacityValue;
     }
 }
+
+void Fixture2::setDraggerGVisibility(bool visible)
+{
+    if(_visibleG == visible){ return; }
+    _visibleG = visible;
+    if(_visibleG){
+        _draggerG->setNodeMask(~0);
+        setDraggerRVisibility(false);
+    }
+    else{
+        _draggerG->setNodeMask(0);
+    }
+    _draggerG->setHandleEvents(_visibleG);
+
+}
+
+void Fixture2::setDraggerRVisibility(bool visible)
+{
+    if(_visibleR == visible){ return; }
+    _visibleR = visible;
+    if(_visibleR){
+        _draggerR->setNodeMask(~0);
+        setDraggerGVisibility(false);
+    }
+    else{
+        _draggerR->setNodeMask(0);
+    }
+    _draggerR->setHandleEvents(_visibleR);
+}
+

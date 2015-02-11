@@ -31,26 +31,50 @@ VizualSceny2::VizualSceny2()
     addFixtureChild();
 }
 
-void VizualSceny2::doUserOperation(osg::Drawable *shape)
+void VizualSceny2::setToBeMovable(osg::Drawable *shape)
 {
     QList<Fixture2>::iterator i;
-    for (i = _fixture.begin(); i != _fixture.end(); ++i)
+    for (i = _fixtures.begin(); i != _fixtures.end(); ++i)
     {
         if( shape == i->getPyramid()->getDrawable(0) )
         {
-            i->changeColor(osg::Vec3( 0.0f, 0.0f, 1.0f ) );
+            i->changeColor(osg::Vec3( 0.0f, 1.0f, 0.0f ) );
+            i->setDraggerGVisibility(true);
         }
+        else
+        {
+            i->setDraggerGVisibility(false);
+        }
+        i->setDraggerRVisibility(false);
+    }
+}
+
+void VizualSceny2::setToBeRotatable(osg::Drawable *shape)
+{
+    QList<Fixture2>::iterator i;
+    for (i = _fixtures.begin(); i != _fixtures.end(); ++i)
+    {
+        if( shape == i->getPyramid()->getDrawable(0) )
+        {
+            i->changeColor(osg::Vec3( 0.0f, 1.0f, 0.0f ) );
+            i->setDraggerRVisibility(true);
+        }
+        else
+        {
+            i->setDraggerRVisibility(false);
+        }
+        i->setDraggerGVisibility(false);
     }
 }
 
 void VizualSceny2::addFixtureChild()
 {
-    _fixture.append(Fixture2());
-    osg::ref_ptr<osg::MatrixTransform> trans = new osg::MatrixTransform;
-    trans->setMatrix( osg::Matrix::rotate(osg::PI / 4, osg::Vec3d(-1, 0,  0)) * osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 7.0f)) );
-    trans->addChild( osgCookBook::addDraggerToScene( _fixture.last().getFixture() ) );
-    _root->addChild( trans );
-    _fixture.last().changeColor(osg::Vec3(0.4f, 0.0f, 1.0f));
-    _fixture.last().changeOpacity(0.6f);
+    _fixtures.append(Fixture2());
+//    osg::ref_ptr<osg::MatrixTransform> trans = new osg::MatrixTransform;
+//    trans->setMatrix( osg::Matrix::rotate(osg::PI / 4, osg::Vec3d(-1, 0,  0)) * osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 7.0f)) );
+//    trans->addChild( osgCookBook::addDraggerToScene( _fixtures.last().getFixture() ) );
+    _root->addChild( _fixtures.last().getFixture() );
+    _fixtures.last().changeColor(osg::Vec3(0.4f, 0.0f, 1.0f));
+//    _fixtures.last().changeOpacity(0.6f);
 
 }

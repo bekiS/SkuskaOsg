@@ -12,11 +12,18 @@ class SetShapeColorHandler : public osgCookBook::PickHandler
 public:
     SetShapeColorHandler( VizualSceny2 * scene ) : _scene( scene ) {}
 
-    virtual void doUserOperations( osgUtil::LineSegmentIntersector::Intersection& result )
+    virtual void doUserOperations( osgUtil::LineSegmentIntersector::Intersection& result,
+                                   const osgGA::GUIEventAdapter& ea)
     {
         osg::Drawable* shape = dynamic_cast<osg::Drawable*>( result.drawable.get() );
-        if ( shape )
-            _scene->doUserOperation(shape);
+        if ( shape ){
+           if(ea.getModKeyMask()&osgGA::GUIEventAdapter::MODKEY_SHIFT)
+           {
+               _scene->setToBeRotatable(shape);
+           }
+           else //in case both shift and ctrl or only ctrl
+            _scene->setToBeMovable(shape);
+        }
     }
 
 private:

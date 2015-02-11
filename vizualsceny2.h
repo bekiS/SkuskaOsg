@@ -14,14 +14,15 @@ class VizualSceny2
 public:
     VizualSceny2();
     osg::ref_ptr<osg::Group> get(){return _root;}
-    QList<Fixture2> getCone(){ return _fixture; }
+    QList<Fixture2> getCone(){ return _fixtures; }
 
-    void doUserOperation(osg::Drawable *shape);
+    void setToBeMovable(osg::Drawable *shape);
+    void setToBeRotatable(osg::Drawable *shape);
     void addFixtureChild();
 
 private:
     osg::ref_ptr<osg::Group> _root;
-    QList<Fixture2> _fixture;
+    QList<Fixture2> _fixtures;
 
 };
 

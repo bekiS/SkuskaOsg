@@ -25,7 +25,7 @@ namespace osgCookBook
     {
     public:
         virtual bool handle( const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa );
-        virtual void doUserOperations( osgUtil::LineSegmentIntersector::Intersection& result ) = 0;
+        virtual void doUserOperations( osgUtil::LineSegmentIntersector::Intersection& result, const osgGA::GUIEventAdapter& ea ) = 0;
     };
     osg::Group *addDraggerToScene( osg::Node* scene );
 
