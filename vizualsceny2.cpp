@@ -38,7 +38,7 @@ void VizualSceny2::setToBeMovable(osg::Drawable *shape)
     {
         if( shape == i->getPyramid()->getDrawable(0) )
         {
-            i->changeColor(osg::Vec3( 0.0f, 1.0f, 0.0f ) );
+//            i->changeColor(osg::Vec3( 0.0f, 1.0f, 0.0f ) );
             i->setDraggerGVisibility(true);
         }
         else
@@ -56,7 +56,7 @@ void VizualSceny2::setToBeRotatable(osg::Drawable *shape)
     {
         if( shape == i->getPyramid()->getDrawable(0) )
         {
-            i->changeColor(osg::Vec3( 0.0f, 1.0f, 0.0f ) );
+//            i->changeColor(osg::Vec3( 0.0f, 1.0f, 0.0f ) );
             i->setDraggerRVisibility(true);
         }
         else
