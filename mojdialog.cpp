@@ -2,11 +2,9 @@
 #include "ui_mojdialog.h"
 
 #include <osg/Geode>
-//#include <osgDB/ReadFile>
 
 #include "viewerwidget.h"
-//#include "cloneobjectroot.h"
-//#include "auto.h"
+
 
 
 osgQt::GraphicsWindowQt* createGraphicsWindow( int x, int y, int w, int h )
@@ -28,12 +26,9 @@ MojDialog::MojDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     osgQt::GraphicsWindowQt* gw = createGraphicsWindow( 50, 50, 640, 480 );
-//    osg::Node* scene = osgDB::readNodeFile("/home/beki/par.osgt");
 
-    //CloneObjectRoot root = CloneObjectRoot();
-    //Auto root = Auto();
     _root = new VizualSceny2();
-    ViewerWidget* widget = new ViewerWidget(gw, _root /* scene */);
+    ViewerWidget* widget = new ViewerWidget(gw, _root );
     widget->setGeometry( 100, 100, 800, 600 );
     widget->show();
 

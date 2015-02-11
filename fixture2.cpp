@@ -6,17 +6,13 @@
 
 Fixture2::Fixture2()
 {
-    _fixture = new osg::Group();
-
-    osg::ref_ptr<osg::Node> head = osgDB::readNodeFile("/home/beki/par.osgt");
-//   _fixture->addChild(head);
+    osg::ref_ptr<osg::Node> head = osgDB::readNodeFile("par.osgt");
 
     _pyramidGeode = new osg::Geode();
     osg::ref_ptr<osg::Geometry> pyramidGeometry = new osg::Geometry();
     _pyramidGeode->addDrawable(pyramidGeometry);
     pyramidGeometry->setDataVariance( osg::Object::DYNAMIC );
     pyramidGeometry->setUseDisplayList( false );
-//    _fixture->addChild(_pyramidGeode);
 
     osg::ref_ptr<osg::Vec3Array> pyramidVertices = new osg::Vec3Array();
     pyramidVertices->push_back( osg::Vec3(  0,  0, 0) ); // peak
@@ -39,7 +35,7 @@ Fixture2::Fixture2()
     pyramidFace->push_back(1);
     pyramidGeometry->addPrimitiveSet(pyramidFace);
 
-
+    // transparent cone
     _colors = new osg::Vec4Array();
     _colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f) ); //index 0 white
     for (int i = 0; i < faces; ++i)
@@ -58,6 +54,7 @@ Fixture2::Fixture2()
     blendFunc->setFunction( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     stateset->setAttributeAndModes( blendFunc );
 
+    //all fixture transformations
     _transG = new osg::MatrixTransform;
     _transR = new osg::MatrixTransform;
     _transQLC = new osg::MatrixTransform;
@@ -65,10 +62,7 @@ Fixture2::Fixture2()
     _transR->setMatrix( osg::Matrix::rotate( osg::PI / 4, osg::Vec3d(-1, 0,  0) ) );
     _transQLC->addChild( head );
     _transQLC->addChild( _pyramidGeode );
-//        trans->setMatrix( osg::Matrix::rotate(osg::PI / 4, osg::Vec3d(-1, 0,  0)) * osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 7.0f)) );
     _transR->addChild( _transQLC );
-//    _transG->addChild( osgCookBook::addDraggerToScene( _transR ) );
-    _fixture->addChild( _transG );
 
 /// translation by user with mouse
     _transR->getOrCreateStateSet()->setMode(GL_NORMALIZE, osg::StateAttribute::ON);
@@ -88,7 +82,6 @@ Fixture2::Fixture2()
     _draggerR = new osgManipulator::TrackballDragger();
     _draggerR->setupDefaultGeometry();
     _transR->addChild(_draggerR);
-//    _draggerR->setMatrix(osg::Matrix::scale(3, 3, 3));
     _draggerR->setHandleEvents(false);
 //    _draggerR->setActivationKeyEvent('r');
     _draggerR->addTransformUpdating( _transQLC );

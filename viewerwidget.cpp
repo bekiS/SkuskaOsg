@@ -4,7 +4,6 @@
 
 #include <osgGA/TrackballManipulator>
 #include "commonfuncitons.h"
-#include <osg/ShapeDrawable>
 #include <osgViewer/ViewerEventHandlers>
 
 class SetShapeColorHandler : public osgCookBook::PickHandler

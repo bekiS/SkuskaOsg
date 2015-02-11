@@ -14,20 +14,6 @@ VizualSceny2::VizualSceny2()
     stageGeode stage = stageGeode();
     _root->addChild( stage.get() );
 
-
-//    int numberOfFixtures = 5;
-//    float space = stage.getWidth() / (float)(numberOfFixtures + 1);
-//    float posX = stage.getWidth() * -0.5f;
-//    for( int i = 0; i < numberOfFixtures; ++i){
-//    _fixture.append(Fixture2());
-//        osg::ref_ptr<osg::MatrixTransform> trans = new osg::MatrixTransform;
-//        posX += space;
-//        trans->setMatrix( osg::Matrix::rotate(osg::PI / 4, osg::Vec3d(-1, 0,  0)) * osg::Matrix::translate( osg::Vec3(posX, 8.0f, 7.0f)) );
-//        trans->addChild( osgCookBook::addDraggerToScene( _fixture.last().getFixture() ) );
-//        _root->addChild( trans );
-//        _fixture.last().changeColor(osg::Vec3((float)(i+ 1)/(float)numberOfFixtures, 1.0f, 0.0f));
-//        _fixture.last().changeOpacity(0.6f);
-//    }
     addFixtureChild();
 }
 
@@ -38,7 +24,6 @@ void VizualSceny2::setToBeMovable(osg::Drawable *shape)
     {
         if( shape == i->getPyramid()->getDrawable(0) )
         {
-//            i->changeColor(osg::Vec3( 0.0f, 1.0f, 0.0f ) );
             i->setDraggerGVisibility(true);
         }
         else
@@ -56,7 +41,6 @@ void VizualSceny2::setToBeRotatable(osg::Drawable *shape)
     {
         if( shape == i->getPyramid()->getDrawable(0) )
         {
-//            i->changeColor(osg::Vec3( 0.0f, 1.0f, 0.0f ) );
             i->setDraggerRVisibility(true);
         }
         else
@@ -70,11 +54,7 @@ void VizualSceny2::setToBeRotatable(osg::Drawable *shape)
 void VizualSceny2::addFixtureChild()
 {
     _fixtures.append(Fixture2());
-//    osg::ref_ptr<osg::MatrixTransform> trans = new osg::MatrixTransform;
-//    trans->setMatrix( osg::Matrix::rotate(osg::PI / 4, osg::Vec3d(-1, 0,  0)) * osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 7.0f)) );
-//    trans->addChild( osgCookBook::addDraggerToScene( _fixtures.last().getFixture() ) );
     _root->addChild( _fixtures.last().getFixture() );
     _fixtures.last().changeColor(osg::Vec3(0.4f, 0.0f, 1.0f));
-//    _fixtures.last().changeOpacity(0.6f);
 
 }
