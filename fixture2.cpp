@@ -6,7 +6,7 @@
 
 Fixture2::Fixture2()
 {
-    osg::ref_ptr<osg::Node> head = osgDB::readNodeFile("par.osgt");
+    osg::ref_ptr<osg::Node> head = osgDB::readNodeFile("/home/beki/SceneItems/PAR64.osgt");
 
     _pyramidGeode = new osg::Geode();
     osg::ref_ptr<osg::Geometry> pyramidGeometry = new osg::Geometry();
@@ -20,7 +20,7 @@ Fixture2::Fixture2()
     double partOfCircle = osg::PI * 2.0 / (double)faces ;
     double position = 0.0;
     for (int i = 0; i < faces; ++i){
-        pyramidVertices->push_back( osg::Vec3( sin(position), cos(position), -10) ); // points at base
+        pyramidVertices->push_back( osg::Vec3( sin(position), cos(position), -4) ); // points at base
         position += partOfCircle;
     }
     pyramidGeometry->setVertexArray( pyramidVertices );
@@ -58,7 +58,7 @@ Fixture2::Fixture2()
     _transG = new osg::MatrixTransform;
     _transR = new osg::MatrixTransform;
     _transQLC = new osg::MatrixTransform;
-    _transG->setMatrix(osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 7.0f) ) );
+    _transG->setMatrix(osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 3.0f) ) );
     _transR->setMatrix( osg::Matrix::rotate( osg::PI / 4, osg::Vec3d(-1, 0,  0) ) );
     _transQLC->addChild( head );
     _transQLC->addChild( _pyramidGeode );
@@ -67,7 +67,7 @@ Fixture2::Fixture2()
 /// translation by user with mouse
     _transR->getOrCreateStateSet()->setMode(GL_NORMALIZE, osg::StateAttribute::ON);
     _transG->addChild( _transR );
-    _draggerG = new osgManipulator::TranslateAxisDragger();
+    _draggerG = new osgManipulator::Translate2DDragger();
     _draggerG->setupDefaultGeometry();
     _transG->addChild(_draggerG);
     _draggerG->setMatrix(osg::Matrix::scale(3, 3, 3));

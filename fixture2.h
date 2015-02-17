@@ -3,7 +3,7 @@
 
 #include <osg/Geode>
 #include <osg/Geometry>
-#include <osgManipulator/TranslateAxisDragger>
+#include <osgManipulator/Translate2DDragger>
 #include <osgManipulator/TrackballDragger>
 
 class Fixture2
@@ -11,11 +11,13 @@ class Fixture2
 public:
     Fixture2();
     osg::ref_ptr<osg::MatrixTransform> getFixture(){ return _transG; }
-    osg::ref_ptr<osg::Geode> getPyramid(){ return _pyramidGeode; }
+    osg::ref_ptr<osg::Drawable> getDrawable() {return _pyramidGeode->getDrawable(0); }
+//    osg::ref_ptr<osg::Geode> getPyramid(){ return _pyramidGeode; }
     void changeColor(osg::Vec3 colorValue, bool overwrite = 1 );
     void changeOpacity( float opacityValue, bool overwrite = 1 );
     void setDraggerGVisibility(bool visible);
     void setDraggerRVisibility(bool visible);
+
 
 private:
     osg::ref_ptr<osg::Vec4Array> _colors;
@@ -25,7 +27,7 @@ private:
     osg::ref_ptr<osg::MatrixTransform> _transR;
     osg::ref_ptr<osg::MatrixTransform> _transQLC;
 
-    osg::ref_ptr<osgManipulator::TranslateAxisDragger> _draggerG;
+    osg::ref_ptr<osgManipulator::Translate2DDragger> _draggerG;
     osg::ref_ptr<osgManipulator::TrackballDragger> _draggerR;
     bool _visibleG;
     bool _visibleR;

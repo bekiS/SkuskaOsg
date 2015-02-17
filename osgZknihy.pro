@@ -38,4 +38,5 @@ INCLUDEPATH += . /usr/include
 LIBS += -Lusr/lib -losg -losgViewer -lOpenThreads -losgUtil -losgDB -losgGA -losgQt -losgManipulator
 
 OTHER_FILES += \
-    par.osgt
+    SceneItems/Stage.osgt \
+    SceneItems/PAR64.osgt

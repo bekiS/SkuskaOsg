@@ -6,8 +6,7 @@ stageGeode::stageGeode()
     _depth = 10.0;
     _height = 1.0;
     _stageGeode = new osg::Geode();
-
-    osg::ref_ptr<osg::Geometry> stageGeometry = new osg::Geometry();
+     osg::ref_ptr<osg::Geometry> stageGeometry = new osg::Geometry();
     _stageGeode->addDrawable( stageGeometry );
 
     osg::ref_ptr<osg::Vec3Array> stageVertices = new osg::Vec3Array();
