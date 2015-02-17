@@ -17,10 +17,13 @@ Fixture2::Fixture2()
     osg::ref_ptr<osg::Vec3Array> pyramidVertices = new osg::Vec3Array();
     pyramidVertices->push_back( osg::Vec3(  0,  0, 0) ); // peak
     int faces = 16;
+    float width = 1.26492; //http://www.fas.harvard.edu/~loebinfo/loebinfo/lighting/lighting.html#PAR MFL transformed to metrics
+    float height = 0.59436;
+    float lenght = 6.096;
     double partOfCircle = osg::PI * 2.0 / (double)faces ;
     double position = 0.0;
     for (int i = 0; i < faces; ++i){
-        pyramidVertices->push_back( osg::Vec3( sin(position), cos(position), -4) ); // points at base
+        pyramidVertices->push_back( osg::Vec3( sin(position) * width, cos(position) * height, - (lenght)) ); // points at base
         position += partOfCircle;
     }
     pyramidGeometry->setVertexArray( pyramidVertices );
@@ -58,7 +61,7 @@ Fixture2::Fixture2()
     _transG = new osg::MatrixTransform;
     _transR = new osg::MatrixTransform;
     _transQLC = new osg::MatrixTransform;
-    _transG->setMatrix(osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 3.0f) ) );
+    _transG->setMatrix(osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 6.0f) ) );
     _transR->setMatrix( osg::Matrix::rotate( osg::PI / 4, osg::Vec3d(-1, 0,  0) ) );
     _transQLC->addChild( head );
     _transQLC->addChild( _pyramidGeode );
