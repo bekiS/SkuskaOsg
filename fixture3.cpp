@@ -1,14 +1,15 @@
-#include "fixture2.h"
+#include "fixture3.h"
 #include <osgDB/ReadFile>
-
 #include <osg/BlendFunc>
 #include <osg/MatrixTransform>
 #include <osg/CullFace>
 #include "commonfuncitons.h"
 
-Fixture2::Fixture2()
+Fixture3::Fixture3()
 {
-    osg::ref_ptr<osg::Node> head = osgDB::readNodeFile("SceneItems/PAR64.osgt");
+    osg::ref_ptr<osg::Node> head = osgDB::readNodeFile("/home/beki/SceneItems/martin_mac_250_krypton/hlava.osgt");
+    osg::ref_ptr<osg::Node> yoke = osgDB::readNodeFile("/home/beki/SceneItems/martin_mac_250_krypton/otocnacast.osgt");
+    osg::ref_ptr<osg::Node> base = osgDB::readNodeFile("/home/beki/SceneItems/martin_mac_250_krypton/podstavec.osgt");
 
     _pyramidGeode = new osg::Geode();
     osg::ref_ptr<osg::Geometry> pyramidGeometry = new osg::Geometry();
@@ -18,14 +19,14 @@ Fixture2::Fixture2()
 
     osg::ref_ptr<osg::Vec3Array> pyramidVertices = new osg::Vec3Array();
     pyramidVertices->push_back( osg::Vec3(  0,  0, 0) ); // peak
-    int faces = 4;
+    int faces = 16;
     float width = 1.26492; //http://www.fas.harvard.edu/~loebinfo/loebinfo/lighting/lighting.html#PAR MFL transformed to metrics
-    float height = width;//0.59436;
+    float height = 1.26492;
     float lenght = 6.096;
     double partOfCircle = osg::PI * 2.0 / (double)faces ;
     double position = 0.0;
     for (int i = 0; i < faces; ++i){
-        pyramidVertices->push_back( osg::Vec3( sin(position) * width, cos(position) * height, - (lenght)) ); // points at base
+        pyramidVertices->push_back( osg::Vec3( sin(position) * width, cos(position) * height,  (lenght)) ); // points at base
         position += partOfCircle;
     }
     pyramidGeometry->setVertexArray( pyramidVertices );
@@ -42,16 +43,11 @@ Fixture2::Fixture2()
 
     // transparent cone
     _colors = new osg::Vec4Array();
-    _colors->push_back(osg::Vec4(1.0f, 0.05f, 0.02f, 1.0f) * 30.0f); //index 0 white
-//    for (int i = 0; i < faces; ++i)
-//    {
-//    _colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 0.0f) ); //index i off
-//    }
-
-    _colors->push_back(osg::Vec4(1.0f, 0.03f, 0.03f, 1.0f * 0.03f));
-    _colors->push_back(osg::Vec4(1.0f, 0.03f, 0.03f, 1.0f * 0.03f));
-    _colors->push_back(osg::Vec4(1.0f, 0.03f, 0.03f, 1.0f * 0.03f));
-    _colors->push_back(osg::Vec4(1.0f, 0.03f, 0.03f, 1.0f * 0.03f));
+    _colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f) ); //index 0 white
+    for (int i = 0; i < faces; ++i)
+    {
+    _colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 0.0f) ); //index i off
+    }
 
     pyramidGeometry->setColorArray(_colors);
     pyramidGeometry->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
@@ -73,15 +69,17 @@ Fixture2::Fixture2()
     _transR = new osg::MatrixTransform;
     _transQLC = new osg::MatrixTransform;
     _transG->setMatrix(osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 6.0f) ) );
-    _transR->setMatrix( osg::Matrix::rotate( osg::PI / 4, osg::Vec3d(-1, 0,  0) ) );
+    _transR->setMatrix( osg::Matrix::rotate( osg::PI / 8, osg::Vec3d(1, 0,  0) ) );
     _transQLC->addChild( head );
+    _transQLC->addChild( yoke );
+    _transR->addChild( base );
     _transQLC->addChild( _pyramidGeode );
     _transR->addChild( _transQLC );
 
 /// translation by user with mouse
     _transR->getOrCreateStateSet()->setMode(GL_NORMALIZE, osg::StateAttribute::ON);
     _transG->addChild( _transR );
-    _draggerG = new osgManipulator::TranslateAxisDragger();
+    _draggerG = new osgManipulator::Translate2DDragger();
     _draggerG->setupDefaultGeometry();
     _transG->addChild(_draggerG);
     _draggerG->setMatrix(osg::Matrix::scale(3, 3, 3));
@@ -100,10 +98,14 @@ Fixture2::Fixture2()
 //    _draggerR->setActivationKeyEvent('r');
     _draggerR->addTransformUpdating( _transQLC );
     _draggerR->setNodeMask(0);
+
+
+
+
+
 }
 
-
-void Fixture2::changeColor(osg::Vec3 colorValue, bool overwrite)
+void Fixture3::changeColor(osg::Vec3 colorValue, bool overwrite)
 {
     if(_colors){
         for(unsigned int i = 0; i < _colors->size(); ++i){
@@ -123,7 +125,7 @@ void Fixture2::changeColor(osg::Vec3 colorValue, bool overwrite)
 
 }
 
-void Fixture2::changeOpacity(float opacityValue, bool overwrite)
+void Fixture3::changeOpacity(float opacityValue, bool overwrite)
 {
     osg::Vec4 *color = &_colors->operator [](0);
     if (overwrite){
@@ -134,7 +136,7 @@ void Fixture2::changeOpacity(float opacityValue, bool overwrite)
     }
 }
 
-void Fixture2::setDraggerGVisibility(bool visible)
+void Fixture3::setDraggerGVisibility(bool visible)
 {
     if(_visibleG == visible){ return; }
     _visibleG = visible;
@@ -149,7 +151,7 @@ void Fixture2::setDraggerGVisibility(bool visible)
 
 }
 
-void Fixture2::setDraggerRVisibility(bool visible)
+void Fixture3::setDraggerRVisibility(bool visible)
 {
     if(_visibleR == visible){ return; }
     _visibleR = visible;

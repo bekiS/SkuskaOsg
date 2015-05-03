@@ -1,15 +1,15 @@
-#ifndef FIXTURE2_H
-#define FIXTURE2_H
+#ifndef FIXTURE3_H
+#define FIXTURE3_H
 
 #include <osg/Geode>
 #include <osg/Geometry>
-#include <osgManipulator/TranslateAxisDragger>
+#include <osgManipulator/Translate2DDragger>
 #include <osgManipulator/TrackballDragger>
 
-class Fixture2
+class Fixture3
 {
 public:
-    Fixture2();
+    Fixture3();
     osg::ref_ptr<osg::MatrixTransform> getFixture(){ return _transG; }
     osg::ref_ptr<osg::Drawable> getDrawable() {return _pyramidGeode->getDrawable(0); }
 //    osg::ref_ptr<osg::Geode> getPyramid(){ return _pyramidGeode; }
@@ -27,10 +27,10 @@ private:
     osg::ref_ptr<osg::MatrixTransform> _transR;
     osg::ref_ptr<osg::MatrixTransform> _transQLC;
 
-    osg::ref_ptr<osgManipulator::TranslateAxisDragger> _draggerG;
+    osg::ref_ptr<osgManipulator::Translate2DDragger> _draggerG;
     osg::ref_ptr<osgManipulator::TrackballDragger> _draggerR;
     bool _visibleG;
     bool _visibleR;
 };
 
-#endif // FIXTURE2_H
+#endif // FIXTURE3_H

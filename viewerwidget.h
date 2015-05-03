@@ -7,6 +7,7 @@
 #include <osgViewer/Viewer>
 #include <osgQt/GraphicsWindowQt>
 #include "vizualsceny2.h"
+#include "dereferred.h"
 
 class ViewerWidget : public QWidget
 {
@@ -14,6 +15,8 @@ class ViewerWidget : public QWidget
 public:
     ViewerWidget( osgQt::GraphicsWindowQt* gw, VizualSceny2* scene );
     VizualSceny2 *_scene;
+
+
 signals:
 
 public slots:
@@ -24,6 +27,7 @@ protected:
 
     osgViewer::Viewer _viewer;
     QTimer _timer;
+    Dereferred _pipe;
 
 
 };
