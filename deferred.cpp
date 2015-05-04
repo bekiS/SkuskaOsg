@@ -39,10 +39,11 @@ Deferred::Deferred(VizualSceny2 * scene )
 
      QList<Fixture2> fixtures = scene->getFixtures();
      int properties = 5;
-     int maxLights = 100;   //check also in fragment shader
+     int maxLights = 1;   //check also in fragment shader
+     int LightCount = (maxLights < fixtures.length() ? fixtures.length() : maxLights);
      osg::Vec4 lights[ maxLights * properties];
 
-     for(int i = 0; i < fixtures.length() && i < maxLights; ++i)
+     for(int i = 0; i < LightCount; ++i)
      {
         lights[i]     =  fixtures.at(i).getColor();
         lights[i + 1] =  fixtures.at(i).getPosition();
@@ -50,8 +51,9 @@ Deferred::Deferred(VizualSceny2 * scene )
         lights[i + 3] =  fixtures.at(i).getSpot_dir();
         lights[i + 4] =  fixtures.at(i).getSpot_param();
      }
-
+     ss->addUniform(new osg::Uniform("lightsCount", LightCount));
      ss->addUniform(new osg::Uniform("lights", maxLights * properties, lights ));
+
      // Graph.
      _graph->addChild(pass1);
      _graph->addChild(pass2);
@@ -70,7 +72,7 @@ Deferred::Deferred(VizualSceny2 * scene )
          createTextureDisplayQuad(osg::Vec3(0, 0.05, 0),
                                   _pass2Colors,
                                   _textureSize);
-     // Quad to display 3 pass final (screen) texture.
+//      Quad to display 3 pass final (screen) texture.
      osg::ref_ptr<osg::Camera> qTexFinal =
          createTextureDisplayQuad(osg::Vec3(0, 0, 0),
                                   _pass3Final,

@@ -43,7 +43,7 @@ ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw, VizualSceny2 *scene )
     camera->setViewport( new osg::Viewport(0, 0, traits->width, traits->height) );
     camera->setProjectionMatrixAsPerspective(
         30.0f, static_cast<double>(traits->width)/static_cast<double>(traits->height), 1.0f, 1000.0f );
-    camera->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
+//    camera->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
     _viewer.setSceneData( _pipe._graph.get() );
 //    _viewer.addEventHandler( new osgViewer::StatsHandler );
     _viewer.addEventHandler( new SetShapeColorHandler( _scene ) );

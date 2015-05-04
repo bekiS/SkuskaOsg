@@ -76,8 +76,8 @@ Fixture2::Fixture2()
 
     _transG->setMatrix(osg::Matrix::translate( osg::Vec3(0.0f, 8.0f, 6.0f) ) );
     _transR->setMatrix( osg::Matrix::rotate( osg::PI / 4, osg::Vec3d(-1, 0,  0) ) );
-    _transQLC->addChild( head );
-    _transQLC->addChild( _pyramidGeode );
+//    _transQLC->addChild( head );
+//    _transQLC->addChild( _pyramidGeode );
     _transR->addChild( _transQLC );
 
 /// translation by user with mouse
@@ -171,7 +171,7 @@ void Fixture2::setDraggerRVisibility(bool visible)
 osg::Vec4 Fixture2::getSpot_dir() const
 {
     osg::Quat quat = _transR->getMatrix().getRotate();
-    osg::Vec3 rotation = quat.operator *(osg::Vec3( 0.0, 0.0, 1.0));
+    osg::Vec3 rotation = quat.operator *(osg::Vec3( 0.0, 0.0, -1.0));
     return osg::Vec4(rotation, 1.0);
 }
 

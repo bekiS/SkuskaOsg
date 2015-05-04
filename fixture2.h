@@ -19,9 +19,9 @@ public:
     void setDraggerRVisibility(bool visible);
     osg::Vec4 getColor()       const { return _colors->operator [](0); }
     osg::Vec4 getPosition()    const { return osg::Vec4(_transG->getMatrix().getTrans(), 1.0); }
-    osg::Vec4 getAttenuation() const { return osg::Vec4(0.0, 0.0, 1.0, 1.0); }
+    osg::Vec4 getAttenuation() const { return osg::Vec4(.1, 0.0, 0.0, 1.0); }
     osg::Vec4 getSpot_dir()    const;
-    osg::Vec4 getSpot_param()  const { return osg::Vec4(cos_spot_cutoff, 1.15, 0.0, 1.0); }
+    osg::Vec4 getSpot_param()  const { return osg::Vec4(0, 1.15, 0.0, 1.0); }
 
 private:
     osg::ref_ptr<osg::Vec4Array> _colors;

@@ -16,8 +16,8 @@ VizualSceny2::VizualSceny2()
     osg::ref_ptr<osg::Node> stage = osgDB::readNodeFile("/home/beki/SceneItems/stage.osgt");
     _root->addChild( stage.get() );
     addFixtureChild();
-    _light = createLight(osg::Vec3(0.0, 8.0, 6.0));
-    _root->addChild(_light.get());
+//    _light = createLight(osg::Vec3(0.0, 8.0, 6.0));
+//    _root->addChild(_light.get());
 
 //    SkuskaShadra tiene = SkuskaShadra();
 //    _root->addChild(tiene.shadowedScene);
@@ -65,12 +65,12 @@ void VizualSceny2::addFixtureChild()
 
 }
 
-osg::ref_ptr<osg::LightSource> VizualSceny2::createLight(const osg::Vec3 &pos)
-{
-    osg::ref_ptr<osg::LightSource> light = new osg::LightSource;
-    light->getLight()->setPosition(osg::Vec4(pos.x(), pos.y(), pos.z(), 1));
-    light->getLight()->setAmbient(osg::Vec4(0.2, 0.2, 0.2, 1));
-    light->getLight()->setDiffuse(osg::Vec4(0.8, 0.8, 0.8, 1));
-    return light;
+//osg::ref_ptr<osg::LightSource> VizualSceny2::createLight(const osg::Vec3 &pos)
+//{
+//    osg::ref_ptr<osg::LightSource> light = new osg::LightSource;
+//    light->getLight()->setPosition(osg::Vec4(pos.x(), pos.y(), pos.z(), 1));
+//    light->getLight()->setAmbient(osg::Vec4(0.2, 0.2, 0.2, 1));
+//    light->getLight()->setDiffuse(osg::Vec4(0.8, 0.8, 0.8, 1));
+//    return light;
 
-}
+//}

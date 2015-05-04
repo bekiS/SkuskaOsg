@@ -10,6 +10,6 @@ void main()
     gl_FragData[0] = vec4(pos_worldspace, gl_FragCoord.z);
     // Convert Tangent space to World space with TBN matrix.
     gl_FragData[1] = vec4(t_worldspace + b_worldspace + n_worldspace, 1.0);
-    gl_FragData[2] = vec4(c_worldspace.xyz, 0.0);
+    gl_FragData[2] = vec4(c_worldspace);
 }
 
