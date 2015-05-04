@@ -1,72 +1,60 @@
-#include "dereferred.h"
+#include "deferred.h"
 #include <osg/PolygonMode>
 #include <osgDB/ReadFile>
 #include <osgShadow/SoftShadowMap>
 #include <QString>
+#include <QList>
+#include "vizualsceny2.h"
 
 
-Dereferred::Dereferred(osg::ref_ptr<osg::Group> scene
-                      , osg::ref_ptr<osg::LightSource> light)
+Deferred::Deferred(VizualSceny2 * scene )
 {
-
-
-//    osg::Vec3 lightPos(0, 0, 80);
-//    osg::ref_ptr<osg::Group> scene = createSceneRoom();
-//    osg::ref_ptr<osg::LightSource> light = createLight(lightPos);
-//    scene->addChild(light.get());
-    // Shadowed scene.
-    osg::ref_ptr<osgShadow::SoftShadowMap> shadowMap = new osgShadow::SoftShadowMap;
-    shadowMap->setJitteringScale(16);
-    shadowMap->addShader(osgDB::readShaderFile("pass1Shadow.frag"));
-    shadowMap->setLight(light);
-    osg::ref_ptr<osgShadow::ShadowedScene> shadowedScene = new osgShadow::ShadowedScene;
-    shadowedScene->setShadowTechnique(shadowMap.get());
-    shadowedScene->addChild(scene.get());
 
      _graph = new osg::Group;
      _textureSize = 1024;
-     // Pass 1 (shadow).
-     _pass1Shadows = createFloatTextureRectangle(_textureSize);
-     osg::ref_ptr<osg::Camera> pass1 =
-         createRTTCamera(osg::Camera::COLOR_BUFFER, _pass1Shadows);
-     pass1->addChild(shadowedScene.get());
-     // Pass 2 (positions, normals, colors).
+      // Pass 1 (positions, normals, colors).
      _pass2Positions = createFloatTextureRectangle(_textureSize);
      _pass2Normals   = createFloatTextureRectangle(_textureSize);
      _pass2Colors    = createFloatTextureRectangle(_textureSize);
-     osg::ref_ptr<osg::Camera> pass2 =
+     osg::ref_ptr<osg::Camera> pass1 =
          createRTTCamera(osg::Camera::COLOR_BUFFER0, _pass2Positions);
-     pass2->attach(osg::Camera::COLOR_BUFFER1,_pass2Normals);
-     pass2->attach(osg::Camera::COLOR_BUFFER2, _pass2Colors);
-     pass2->addChild(scene.get());
-     osg::StateSet *ss = setShaderProgram(pass2, "shaders/pass2.vert", "shaders/pass2.frag");
-//treba preskumat, ci to chcem
-     ss->setTextureAttributeAndModes(0, createTexture("shaders/rockwall.png"));
-     ss->setTextureAttributeAndModes(1, createTexture("shaders/rockwall_NH.png"));
-     ss->addUniform(new osg::Uniform("diffMap", 0));
-     ss->addUniform(new osg::Uniform("bumpMap", 1));
-     // Pass 3 (final).
+     pass1->attach(osg::Camera::COLOR_BUFFER1,_pass2Normals);
+     pass1->attach(osg::Camera::COLOR_BUFFER2, _pass2Colors);
+     pass1->addChild(scene->get());
+     osg::StateSet *ss = setShaderProgram(pass1, "shaders/pass1.vert", "shaders/pass1.frag");
+
+     // Pass 2 (final).
      _pass3Final = createFloatTextureRectangle(_textureSize);
 
-     osg::Vec4f lightPosV4 = light->getLight()->getPosition();
-     osg::Vec3f lightPos = osg::Vec3f( lightPosV4.x(), lightPosV4.y(), lightPosV4.z() );
-     osg::ref_ptr<osg::Camera> pass3 =
-         createRTTCamera(osg::Camera::COLOR_BUFFER, _pass3Final, true);
-     ss = setShaderProgram(pass3, "shaders/pass3.vert", "shaders/pass3.frag");
+     osg::ref_ptr<osg::Camera> pass2 =
+                   createRTTCamera(osg::Camera::COLOR_BUFFER, _pass3Final, true);
+     ss = setShaderProgram(pass2, "shaders/pass2.vert", "shaders/fragment.frag");
      ss->setTextureAttributeAndModes(0, _pass2Positions);
      ss->setTextureAttributeAndModes(1, _pass2Normals);
      ss->setTextureAttributeAndModes(2, _pass2Colors);
-     ss->setTextureAttributeAndModes(3, _pass1Shadows);
      ss->addUniform(new osg::Uniform("posMap",    0));
      ss->addUniform(new osg::Uniform("normalMap", 1));
      ss->addUniform(new osg::Uniform("colorMap",  2));
-     ss->addUniform(new osg::Uniform("shadowMap", 3));
      // Light position.
-     ss->addUniform(new osg::Uniform("lightPos", lightPos));
+
+     QList<Fixture2> fixtures = scene->getFixtures();
+     int properties = 5;
+     int maxLights = 100;   //check also in fragment shader
+     osg::Vec4 lights[ maxLights * properties];
+
+     for(int i = 0; i < fixtures.length() && i < maxLights; ++i)
+     {
+        lights[i]     =  fixtures.at(i).getColor();
+        lights[i + 1] =  fixtures.at(i).getPosition();
+        lights[i + 2] =  fixtures.at(i).getAttenuation();
+        lights[i + 3] =  fixtures.at(i).getSpot_dir();
+        lights[i + 4] =  fixtures.at(i).getSpot_param();
+     }
+
+     ss->addUniform(new osg::Uniform("lights", maxLights * properties, lights ));
      // Graph.
      _graph->addChild(pass1);
      _graph->addChild(pass2);
-     _graph->addChild(pass3);
 
 
      // Quads to display 1 pass textures.
@@ -79,13 +67,8 @@ Dereferred::Dereferred(osg::ref_ptr<osg::Group> scene
                                   _pass2Positions,
                                   _textureSize);
      osg::ref_ptr<osg::Camera> qTexC =
-         createTextureDisplayQuad(osg::Vec3(0, 0, 0),
+         createTextureDisplayQuad(osg::Vec3(0, 0.05, 0),
                                   _pass2Colors,
-                                  _textureSize);
-     // Qaud to display 2 pass shadow texture.
-     osg::ref_ptr<osg::Camera> qTexS =
-         createTextureDisplayQuad(osg::Vec3(0.7, 0.7, 0),
-                                  _pass1Shadows,
                                   _textureSize);
      // Quad to display 3 pass final (screen) texture.
      osg::ref_ptr<osg::Camera> qTexFinal =
@@ -94,23 +77,19 @@ Dereferred::Dereferred(osg::ref_ptr<osg::Group> scene
                                   _textureSize,
                                   1,
                                   1);
-     // Must be processed before the first pass takes
-     // the result into pass1Shadows texture.
-     _graph->insertChild(0, shadowedScene.get());
      // Quads are displayed in order, so the biggest one (final) must be first,
      // otherwise other quads won't be visible.
      _graph->addChild(qTexFinal.get());
      _graph->addChild(qTexN.get());
      _graph->addChild(qTexP.get());
      _graph->addChild(qTexC.get());
-     _graph->addChild(qTexS.get());
 }
 
-Dereferred::~Dereferred()
+Deferred::~Deferred()
 {
 }
 
-osg::TextureRectangle *Dereferred::createFloatTextureRectangle(int textureSize)
+osg::TextureRectangle *Deferred::createFloatTextureRectangle(int textureSize)
 {
     osg::ref_ptr<osg::TextureRectangle> tex2D = new osg::TextureRectangle;
     tex2D->setTextureSize(textureSize, textureSize);
@@ -120,7 +99,7 @@ osg::TextureRectangle *Dereferred::createFloatTextureRectangle(int textureSize)
     return tex2D.release();
 }
 
-osg::Camera *Dereferred::createHUDCamera(double left, double right, double bottom, double top)
+osg::Camera *Deferred::createHUDCamera(double left, double right, double bottom, double top)
 {
     osg::ref_ptr<osg::Camera> camera = new osg::Camera;
     camera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
@@ -132,7 +111,7 @@ osg::Camera *Dereferred::createHUDCamera(double left, double right, double botto
     return camera.release();
 }
 
-osg::Camera *Dereferred::createRTTCamera( osg::Camera::BufferComponent buffer
+osg::Camera *Deferred::createRTTCamera( osg::Camera::BufferComponent buffer
                                         , osg::Texture *tex
                                         , bool isAbsolute)
 {
@@ -158,7 +137,7 @@ osg::Camera *Dereferred::createRTTCamera( osg::Camera::BufferComponent buffer
     return camera.release();
 }
 
-osg::Geode *Dereferred::createScreenQuad(float width, float height, float scale, osg::Vec3 corner)
+osg::Geode *Deferred::createScreenQuad(float width, float height, float scale, osg::Vec3 corner)
 {
     osg::Geometry* geom = osg::createTexturedQuadGeometry(
          corner,
@@ -180,7 +159,7 @@ osg::Geode *Dereferred::createScreenQuad(float width, float height, float scale,
 
 }
 
-osg::Texture2D *Dereferred::createTexture(const std::string &fileName)
+osg::Texture2D *Deferred::createTexture(const std::string &fileName)
 {
     osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D;
     texture->setImage(osgDB::readImageFile(fileName));
@@ -191,7 +170,7 @@ osg::Texture2D *Dereferred::createTexture(const std::string &fileName)
     return texture.release();
 }
 
-osg::ref_ptr<osg::Camera> Dereferred::createTextureDisplayQuad( const osg::Vec3 &pos
+osg::ref_ptr<osg::Camera> Deferred::createTextureDisplayQuad( const osg::Vec3 &pos
                                                               , osg::StateAttribute *tex
                                                               , float scale
                                                               , float width
@@ -206,7 +185,7 @@ osg::ref_ptr<osg::Camera> Dereferred::createTextureDisplayQuad( const osg::Vec3 
 
 
 
-osg::ref_ptr<osg::StateSet> Dereferred::setShaderProgram( osg::ref_ptr<osg::Camera> pass
+osg::ref_ptr<osg::StateSet> Deferred::setShaderProgram( osg::ref_ptr<osg::Camera> pass
                                                         , std::string vert
                                                         , std::string frag
                                                         )

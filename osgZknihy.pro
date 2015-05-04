@@ -21,8 +21,8 @@ SOURCES += main.cpp \
     fixture2.cpp \
     vizualsceny2.cpp \
     skuskashadra.cpp \
-    dereferred.cpp \
-    fixture3.cpp
+    fixture3.cpp \
+    deferred.cpp
 
 HEADERS  += \
     viewerwidget.h \
@@ -33,8 +33,8 @@ HEADERS  += \
     fixture2.h \
     vizualsceny2.h \
     skuskashadra.h \
-    dereferred.h \
-    fixture3.h
+    fixture3.h \
+    deferred.h
 
 FORMS    += \
     mojdialog.ui
@@ -48,10 +48,8 @@ OTHER_FILES += \
     SceneItems/PAR64.osgt
 
 DISTFILES += \
+    shaders/pass1.frag \
+    shaders/pass1.vert \
     shaders/pass2.frag \
-    shaders/pass3.frag \
     shaders/pass2.vert \
-    shaders/pass3.vert \
-    shaders/pass1Shadow.frag \
-    shaders/rockwall.png \
-    shaders/rockwall_NH.png
+    shaders/fragment.frag

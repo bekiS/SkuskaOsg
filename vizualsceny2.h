@@ -4,7 +4,7 @@
 #include <osg/MatrixTransform>
 #include <osg/LightSource>
 #include <osg/Geode>
-#include <qlist.h>
+#include <QList>
 
 #include "commonfuncitons.h"
 #include "fixture2.h"

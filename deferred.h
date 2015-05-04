@@ -8,12 +8,14 @@
 #include <osg/TextureRectangle>
 #include <osgShadow/ShadowedScene>
 #include <osg/LightSource>
-class Dereferred
+
+#include "vizualsceny2.h"
+
+class Deferred
 {
 public:
-    Dereferred(osg::ref_ptr<osg::Group> scene,
-               osg::ref_ptr<osg::LightSource> light);
-    ~Dereferred();
+    Deferred(VizualSceny2* scene);
+    ~Deferred();
 
     int _textureSize;
     osg::ref_ptr<osg::Group> _graph;

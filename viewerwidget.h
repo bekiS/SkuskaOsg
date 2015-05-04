@@ -7,7 +7,7 @@
 #include <osgViewer/Viewer>
 #include <osgQt/GraphicsWindowQt>
 #include "vizualsceny2.h"
-#include "dereferred.h"
+#include "deferred.h"
 
 class ViewerWidget : public QWidget
 {
@@ -27,7 +27,7 @@ protected:
 
     osgViewer::Viewer _viewer;
     QTimer _timer;
-    Dereferred _pipe;
+    Deferred _pipe;
 
 
 };

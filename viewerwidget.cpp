@@ -33,7 +33,7 @@ private:
 ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw, VizualSceny2 *scene )
     : QWidget()
     , _scene(scene)
-    , _pipe(scene->get(), scene->getLightSource())
+    , _pipe(scene)
 {
 
     const osg::GraphicsContext::Traits* traits = gw->getTraits();

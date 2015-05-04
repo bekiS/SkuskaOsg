@@ -61,7 +61,7 @@ void VizualSceny2::addFixtureChild()
 {
     _fixtures.append(Fixture2());
     _root->addChild( _fixtures.last().getFixture() );
-//    _fixtures.last().changeColor(osg::Vec3(0.4f, 0.0f, 1.0f));
+    _fixtures.last().changeColor(osg::Vec3(0.4f, 0.0f, 1.0f));
 
 }
 
